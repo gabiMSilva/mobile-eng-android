@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BasicComponents</string>
+    <string name="result_description">Descrição da pesquisa, conteúdo da pesquisa, resultado da pesquisa</string>
+    <string name="result_title">Título do resultado</string>
+</resources>
