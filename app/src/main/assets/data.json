@@ -1,0 +1,38 @@
+[
+  {
+    "nomeAutor": "João Silva",
+    "imagemAutor": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-179110044.jpg",
+    "imagemNoticia": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-536613027.jpg",
+    "titulo": "Novas Tecnologias em 2024",
+    "corpo": "Este artigo explora as mais recentes inovações tecnológicas que estão moldando o ano de 2024.",
+    "link": "https://pucminas.instructure.com",
+    "data": "2024-09-01"
+  },
+  {
+    "nomeAutor": "Maria Oliveira",
+    "imagemAutor": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-179110044.jpg",
+    "imagemNoticia": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-178390705.jpg",
+    "titulo": "A Revolução das Energias Renováveis",
+    "corpo": "Um mergulho profundo nas novas fontes de energia sustentável e seu impacto no meio ambiente.",
+    "link": "https://pucminas.instructure.com",
+    "data": "2024-09-02"
+  },
+  {
+    "nomeAutor": "Pedro Costa",
+    "imagemAutor": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-179110044.jpg",
+    "imagemNoticia": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-601901056.jpg",
+    "titulo": "Tendências em Design de Interiores",
+    "corpo": "Confira as principais tendências de design de interiores para o próximo ano, incluindo novas cores e materiais.",
+    "link": "https://pucminas.instructure.com",
+    "data": "2024-09-03"
+  },
+  {
+    "nomeAutor": "Ana Santos",
+    "imagemAutor": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-179110044.jpg",
+    "imagemNoticia": "https://ciclovivo.com.br/wp-content/uploads/2018/10/iStock-628615976.jpg",
+    "titulo": "Culinária Mundial: O que Está em Alta",
+    "corpo": "Uma análise dos pratos e técnicas culinárias que estão ganhando popularidade ao redor do mundo.",
+    "link": "https://pucminas.instructure.com",
+    "data": "2024-09-04"
+  }
+]

@@ -1,104 +1,83 @@
 package com.gmsilva.basiccomponents
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import androidx.transition.Visibility
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.gmsilva.basiccomponents.databinding.ActivityMainBinding
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickListener {
+
+    private lateinit var binding: ActivityMainBinding
+    private var noticias: List<NoticiaModel> = listOf()
+    private lateinit var adapter: ArrayAdapter<NoticiaModel>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-        // Adicionando referências
-        val textField = findViewById<EditText>(R.id.campo_texto)
-        val searchBtn = findViewById<Button>(R.id.btn_buscar)
-        val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val resultContainer = findViewById<ScrollView>(R.id.pesquisa_container)
-        val resultImage = findViewById<ImageView>(R.id.imagem_resultado)
-        val resultTitle = findViewById<TextView>(R.id.titulo_resultado)
-        val resultDescription = findViewById<TextView>(R.id.descricao_resultado)
+        setupListView()
+    }
 
+    private fun setupListView() {
+        noticias = readJson(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = NoticiaAdapter(
+            noticias, Glide.with(this), this@MainActivity
+        )
+    }
 
-        searchBtn.setOnClickListener {
-            CoroutineScope(Main).launch {
-                val text = textField.text.toString()
-                Toast.makeText(
-                    this@MainActivity,
-                    "Valor do campo de texto: ${text}",
-                    Toast.LENGTH_SHORT
-                ).show()
+    private fun readJson(context: Context): List<NoticiaModel>{
+        val listTemp = mutableListOf<NoticiaModel>()
 
-                textField.isEnabled = false
-                progressBar.isVisible = true
-                searchBtn.isVisible = false
+        try {
 
-                resultContainer.isVisible = false
-                resultTitle.text = ""
-                resultDescription.text = ""
-                resultImage.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this@MainActivity,
-                        R.mipmap.ic_launcher
-                    )
+            val json = context.assets.open("data.json").bufferedReader().use { it.readText() }
+            val jsonArray = JSONArray(json)
+
+            for (i in 0 until jsonArray.length()) {
+                val jsonObject = jsonArray.getJSONObject(i)
+                val nomeAutor = jsonObject.getString("nomeAutor")
+                val imagemAutor = jsonObject.getString("imagemAutor")
+                val imagemNoticia = jsonObject.getString("imagemNoticia")
+                val titulo = jsonObject.getString("titulo")
+                val link = jsonObject.getString("link")
+                val data = jsonObject.getString("data")
+                val corpo = jsonObject.getString("corpo")
+
+                val noticia = NoticiaModel(
+                    imagemNoticia = imagemNoticia,
+                    data = data,
+                    link = link,
+                    nomeAutor = nomeAutor,
+                    imagemAutor = imagemAutor,
+                    titulo = titulo,
+                    corpo = corpo
                 )
 
-                val inseto = buscarResult(text)
-
-                resultContainer.isVisible = true
-                resultTitle.text = inseto.title
-                resultDescription.text = inseto.description
-
-                inseto.image?.let {
-                    resultImage.setImageDrawable(inseto.image)
-                }
-
-
-                textField.isEnabled = true
-                progressBar.isVisible = false
-                searchBtn.isVisible = true
-
+                listTemp.add(noticia)
             }
+        } catch (error: Exception ) {
+            println("Erro na leitura do json")
         }
-
+        return listTemp
 
     }
 
-    suspend fun buscarResult(text: String): InsetoModel {
-        delay(5000)
-
-        if (text == "lagarto") {
-            return InsetoModel(
-                "Inseto Lagarto",
-                "Os lagartos, como os demais répteis, são animais que apresentam corpo coberto por escamas, 4 membros e cauda. Eles fazem parte da ordem dos Escamados juntamente com as serpentes. São ovíparos e alguns são onívoros, como o Teiú. Apresentam grande variação de tamanho desde poucos centímetros até mais de 1 metro da cabeça à ponta da cauda. Existem mais de 3 mil espécies de lagartos, distribuídos em 45 famílias. Dentre os lagartos mais conhecidos, podemos destacar as iguanas, camaleões e lagartixas.",
-                ContextCompat.getDrawable(this, R.mipmap.lagarto)
-            )
-        }
-
-        return InsetoModel()
+    override fun openLink(link: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(link)
+        startActivity(intent)
     }
 }
