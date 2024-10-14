@@ -3,4 +3,6 @@
     <string name="result_description">Descrição da pesquisa, conteúdo da pesquisa, resultado da pesquisa</string>
     <string name="result_title">Título do resultado</string>
     <string name="procurar_por">Procurar por ...</string>
+    <string name="tema_claro">Tema Claro</string>
+    <string name="tema_escuro">Tema Escuro</string>
 </resources>
